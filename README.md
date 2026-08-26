@@ -203,12 +203,16 @@ jupyter notebook notebooks/
 - [x] Repository setup and environment configuration
 - [x] Requirements and tech stack finalized
 - [x] Reference papers reviewed and mapped
-- [ ] **Phase 1** — Elliptic dataset pipeline + GNN models (GCN, GAT, GraphSAGE)
-- [ ] **Phase 2** — Ensemble layer (soft voting + stacking)
-- [ ] **Phase 3** — Explainability layer (SHAP + Captum + PyVis)
-- [ ] **Phase 4** — Quantum-inspired optimization scoring layer
-- [ ] **Phase 5** — Dashboard + FastAPI integration
-- [ ] Final report, presentation, and viva preparation
+- [x] **Phase 1** — Elliptic dataset pipeline + GNN models (GCN, GAT, GraphSAGE)
+- [x] **Phase 2** — Ensemble layer (soft voting + stacking)
+- [x] **Phase 3** — Explainability layer (SHAP + Captum + PyVis)
+- [x] **Phase 4** — Quantum-inspired optimization scoring layer
+- [x] **Phase 5** — Dashboard + FastAPI integration
+- [x] **Phase 6** — Ensemble                ← NEXT
+- [ ] **Phase 7** — Evaluation              ⏳
+- [ ] **Phase 8** — Explainability          ⏳
+- [ ] **Phase 9** — Quantum-inspired        ⏳
+- [ ] **Phase 10** — Integration            ⏳
 
 ***
 
