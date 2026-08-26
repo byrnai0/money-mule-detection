@@ -70,7 +70,6 @@ money-mule-detection/
 ├── results/                    # Saved models, metrics, plots
 ├── requirements.txt
 ├── README.md
-└── .env.example
 ```
 
 ***
