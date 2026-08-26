@@ -8,7 +8,7 @@
 
 ## 📌 Project Status
 
-🚧 **Active Development** — Setting up environment and base pipeline.
+🚧 **Active Development** — Setting up environment and base pipeline. (More changes have been made will update after my shit is done)
 
 ***
 
