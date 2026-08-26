@@ -79,7 +79,6 @@ money-mule-detection/
 | Dataset | Source | Size | Purpose |
 |---|---|---|---|
 | Elliptic Bitcoin Dataset | [Kaggle](https://www.kaggle.com/ellipticco/elliptic-data-set) | 203K nodes, 234K edges | GNN model benchmarking |
-| IBM AML Small Dataset | [IBM AMLSim GitHub](https://github.com/IBM/AMLSim) | 515K nodes, 5M edges | Realistic financial graph testing |
 
 > ⚠️ Datasets are **NOT committed** to this repository due to size and licensing constraints.
 > See [`data/README.md`](data/README.md) for download and setup instructions.
