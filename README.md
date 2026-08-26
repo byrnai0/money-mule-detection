@@ -242,7 +242,7 @@ This repository is currently **team-only**. If you are a collaborator:
 ## 📄 License
 
 This project is developed for **academic purposes** as part of a university major project.
-All dataset usage complies with respective dataset licenses.
+All dataset usage complies with respective dataset licenses. (kraggle)
 
 ***
 
