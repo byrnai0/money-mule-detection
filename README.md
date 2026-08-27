@@ -62,7 +62,9 @@ money-mule-detection/
 │   │   ├── cleaning.py
 │   │   ├── cleaning_v2.py
 │   │   └── labels.py          # Data loading, cleaning, feature engineering
-│   ├── graph/                  # Graph construction (NetworkX + PyG)
+│   ├── graph/
+│   │   ├── __init__.py
+│   │   └── builder.py                  # Graph construction (NetworkX + PyG)
 │   ├── models/                 # GCN, GAT, GraphSAGE, GIN model definitions
 │   ├── ensemble/               # Soft voting, stacking logic
 │   ├── explainability/         # SHAP, LIME, Captum integration
