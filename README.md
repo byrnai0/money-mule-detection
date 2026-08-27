@@ -65,7 +65,20 @@ money-mule-detection/
 │   ├── graph/
 │   │   ├── __init__.py
 │   │   └── builder.py                  # Graph construction (NetworkX + PyG)
-│   ├── models/                 # GCN, GAT, GraphSAGE, GIN model definitions
+│   └── models/
+│       ├── __init__.py
+│       ├── architectures.py
+│       ├── prepare_data.py
+│       ├── gcn_baseline.py
+│       ├── train_gnn.py
+│       ├── train_gnn_sampled.py
+│       ├── ensemble_predictions.py
+│       ├── ensemble_voting.py
+│       ├── tuned_voting.py
+│       ├── stacking.py
+│       ├── threshold_selection.py
+│       ├── phase_6_experiment_summary.md
+│       └── phase_6_experiment_summary_values.csv                 # GCN, GAT, GraphSAGE, GIN model definitions
 │   ├── ensemble/               # Soft voting, stacking logic
 │   ├── explainability/         # SHAP, LIME, Captum integration
 │   ├── quantum/                # Quantum-inspired scoring layer
