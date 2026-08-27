@@ -57,7 +57,11 @@ money-mule-detection/
 │   └── processed/              # Cleaned, preprocessed outputs
 ├── notebooks/                  # EDA and experiment notebooks
 ├── src/
-│   ├── preprocessing/          # Data loading, cleaning, feature engineering
+│   ├── preprocessing/
+│   │   ├── __init__.py
+│   │   ├── cleaning.py
+│   │   ├── cleaning_v2.py
+│   │   └── labels.py          # Data loading, cleaning, feature engineering
 │   ├── graph/                  # Graph construction (NetworkX + PyG)
 │   ├── models/                 # GCN, GAT, GraphSAGE, GIN model definitions
 │   ├── ensemble/               # Soft voting, stacking logic
