@@ -55,7 +55,14 @@ money-mule-detection/
 ├── data/
 │   ├── raw/
 │   │   └── HI-Small_Trans.csv                    # Elliptic + IBM AML raw datasets (not committed)
-│   └── processed/              # Cleaned, preprocessed outputs
+│   ├── processed/
+│   │   ├── HI-Small_Trans_clean.csv
+│   │   ├── account_labels.csv
+│   │   ├── account_features_v2.csv
+│   │   ├── account_features_v3.csv
+│   │   ├── account_features_final.csv
+│   │   ├── feature_profile_v2.csv
+│   │   └── feature_profile_v3.csv             
 ├── notebooks/                  # EDA and experiment notebooks
 ├── src/
 │   ├── ingestion/
