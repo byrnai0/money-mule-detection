@@ -75,7 +75,7 @@ money-mule-detection/
 │           ├── gin_sampled_model.pt
 │           ├── sage_sampled_model.pt
 │           └── cheb_sampled_model.pt             
-├── notebooks/                  # EDA and experiment notebooks
+├── notebooks/      (Yet to add)            # EDA and experiment notebooks 
 ├── src/
 │   ├── ingestion/
 │   │   ├── __init__.py
@@ -111,10 +111,10 @@ money-mule-detection/
 │       ├── threshold_selection.py
 │       ├── phase_6_experiment_summary.md
 │       └── phase_6_experiment_summary_values.csv                 # GCN, GAT, GraphSAGE, GIN model definitions
-│   ├── ensemble/               # Soft voting, stacking logic
-│   ├── explainability/         # SHAP, LIME, Captum integration
-│   ├── quantum/                # Quantum-inspired scoring layer
-│   └── utils/                  # Logging, helpers, config
+│   ├── ensemble/         (Yet to add)      # Soft voting, stacking logic
+│   ├── explainability/   (Yet to add)      # SHAP, LIME, Captum integration
+│   ├── quantum/          (Yet to add)      # Quantum-inspired scoring layer
+│   └── utils/            (Yet to add)      # Logging, helpers, config
 ├── app/
 │   ├── backend/                # FastAPI endpoints
 │   └── frontend/               # Streamlit dashboard
