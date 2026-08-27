@@ -57,6 +57,9 @@ money-mule-detection/
 │   └── processed/              # Cleaned, preprocessed outputs
 ├── notebooks/                  # EDA and experiment notebooks
 ├── src/
+│   ├── ingestion/
+│   │   ├── __init__.py
+│   │   └── loader.py
 │   ├── preprocessing/
 │   │   ├── __init__.py
 │   │   ├── cleaning.py
