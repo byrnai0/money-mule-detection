@@ -67,7 +67,16 @@ money-mule-detection/
 │   │   └── labels.py          # Data loading, cleaning, feature engineering
 │   ├── graph/
 │   │   ├── __init__.py
-│   │   └── builder.py                  # Graph construction (NetworkX + PyG)
+│   │   └── builder.py
+│   ├── features/
+│   │   ├── __init__.py
+│   │   ├── account_features.py
+│   │   ├── account_features_v2.py
+│   │   ├── account_features_v3.py
+│   │   ├── finalize_features.py
+│   │   ├── profile_features_v2.py
+│   │   ├── profile_features_v3.py
+│   │   └── verify_final_features.py                # Graph construction (NetworkX + PyG)
 │   └── models/
 │       ├── __init__.py
 │       ├── architectures.py
