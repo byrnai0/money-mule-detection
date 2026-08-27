@@ -53,7 +53,8 @@ Financial Transaction Data (Elliptic / IBM AML)
 ```
 money-mule-detection/
 ├── data/
-│   ├── raw/                    # Elliptic + IBM AML raw datasets (not committed)
+│   ├── raw/
+│   │   └── HI-Small_Trans.csv                    # Elliptic + IBM AML raw datasets (not committed)
 │   └── processed/              # Cleaned, preprocessed outputs
 ├── notebooks/                  # EDA and experiment notebooks
 ├── src/
