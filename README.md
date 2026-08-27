@@ -62,7 +62,19 @@ money-mule-detection/
 │   │   ├── account_features_v3.csv
 │   │   ├── account_features_final.csv
 │   │   ├── feature_profile_v2.csv
-│   │   └── feature_profile_v3.csv             
+│   │   └── feature_profile_v3.csv
+│   └── graphs/
+│       ├── ibm_aml_graph.pt
+│       ├── training_graph.pt
+│       └── models/
+│           ├── gcn_model.pt
+│           ├── gcn_sampled_model.pt
+│           ├── gat_model.pt
+│           ├── gat_sampled_model.pt
+│           ├── gatv2_sampled_model.pt
+│           ├── gin_sampled_model.pt
+│           ├── sage_sampled_model.pt
+│           └── cheb_sampled_model.pt             
 ├── notebooks/                  # EDA and experiment notebooks
 ├── src/
 │   ├── ingestion/
