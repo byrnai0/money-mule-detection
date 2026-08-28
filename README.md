@@ -4,8 +4,8 @@
 > A Graph Neural Network-based Anti-Money Laundering (AML) system using
 > Ensemble GNNs, Quantum-Inspired Optimization, and Explainability layers
 > for detecting suspicious money mule networks in financial transaction graphs.
-
 ***
+**(The 'research papers' folder WILL be deleted from the repo once this project goes live and public)**
 
 ## 📌 Project Status
 
