@@ -5,9 +5,7 @@ import time
 
 import pandas as pd
 
-print("=" * 75)
-print("ACCOUNT-LEVEL LABEL DERIVATION")
-print("=" * 75)
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 INPUT_FILE = (
@@ -24,6 +22,9 @@ OUTPUT_FILE = (
     / "account_labels.csv"
 )
 
+print("=" * 75)
+print("ACCOUNT-LEVEL LABEL DERIVATION")
+print("=" * 75)
 
 def derive_account_labels() -> None:
 
