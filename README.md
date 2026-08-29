@@ -4,8 +4,8 @@
 > A Graph Neural Network-based Anti-Money Laundering (AML) system using
 > Ensemble GNNs, Quantum-Inspired Optimization, and Explainability layers
 > for detecting suspicious money mule networks in financial transaction graphs.
+
 ***
-**(The 'research papers' folder WILL be deleted from the repo once this project goes live and public)**
 
 ## 📌 Project Status
 
@@ -187,6 +187,7 @@ pip install -r requirements.txt
 ### 4. Install PyTorch and PyTorch Geometric (separately)
 
 ```bash
+(STC)
 # CPU version (works on all machines)
 pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cpu
 pip install torch-geometric==2.5.3
@@ -196,13 +197,6 @@ pip install torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-2.3.0+c
 pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
 pip install torch-geometric==2.5.3
 pip install torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-2.3.0+cu121.html
-```
-
-### 5. Set Up Environment Variables
-
-```bash
-cp .env.example .env
-# Edit .env and fill in any required configuration values
 ```
 
 ### 6. Download Datasets
