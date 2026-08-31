@@ -257,7 +257,7 @@ jupyter notebook notebooks/
 - [x] **Phase 4** — Quantum-inspired optimization scoring layer
 - [x] **Phase 5** — Dashboard + FastAPI integration
 - [x] **Phase 6** — Ensemble                ← NEXT
-- [ ] **Phase 7** — Evaluation              ⏳
+- [x] **Phase 7** — Evaluation              ⏳
 - [ ] **Phase 8** — Explainability          ⏳
 - [ ] **Phase 9** — Quantum-inspired        ⏳
 - [ ] **Phase 10** — Integration            ⏳
