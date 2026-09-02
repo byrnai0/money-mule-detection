@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adversarial Defense Grid — AI Risk Manager</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+  body { background:#0b0e17; color:#e2e8f0; padding: 20px; }
+  h1 { font-size:22px; color:#7dd3fc; }
+  h1 span { color:#f472b6; }
+  .sub { color:#64748b; font-size:13px; margin-bottom:18px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; }
+  .card { background:#131a2b; border:1px solid #1e293b; border-radius:12px; padding:16px; }
+  .card h3 { font-size:11px; text-transform:uppercase; color:#64748b; letter-spacing:1px; }
+  .card .v { font-size:26px; font-weight:700; margin-top: 6px; }
+  .green { color:#4ade80; } .red { color:#f87171; }
+  .amber { color:#fbbf24; } .blue { color:#7dd3fc; }
+  .row { display:grid; grid-template-columns:1.4fr 1fr; gap:14px; }
+  button { background:#2563eb; border:none; color:#fff; padding:12px 22px; border-radius:8px;
+           font-size:15px; font-weight:600; cursor:pointer; margin-right:10px; margin-top:10px; }
+  .pink { background:#db2777 } button.gray { background:#334155; }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  #log { background:#0f1420; border:1px solid #1e293b; border-radius:10px; padding:12px;
+         height: 420px; overflow-y:auto; font-family:monospace; font-size:12px; margin-top:14px; }
+  .tx { padding:6px 8px; border-bottom:1px solid #1a2234; }
+  .tag { padding:1px 8px; border-radius:10px; font-size: 11px; font-weight:700; }
+  .tFRAUD { background:#7f1d1d; color: #fca5a5; }
+  .tLEGIT { background:#14532d; color:#86efac; }
+  .tFALSEPOS { background:#78350f; color:#fcd34d; }
+  .tMISS { background:#7f1d1d; color:#fca5a5; }
+  .tSYS { background:#1e3a5f; color:#7dd3fc; }
+  .cf { background:#1a2332; border-left:3px solid #7dd3fc; padding:6px 10px; margin-top:4px;
+        border-radius:0 6px 6px 0; color:#94a3b8; }
+  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  td, th { padding:6px 10px; border-bottom:1px solid #1e293b; text-align:left; }
+  th { color:#64748b; font-size:11px; text-transform:uppercase; }
+  .bar { height:8px; background:#1e293b; border-radius:4px; overflow:hidden; margin-top:4px; }
+  .bar div { height:100%; background:#7dd3fc; }
+  .loopbox { border:1px dashed #db2777; border-radius:10px; padding:12px; margin-top:12px; }
+</style>
+</head>
+<body>
+
+<h1>🛡️ AI Risk Manager: <span>The Adversarial Defense Grid</span></h1>
+<div class="sub">Guardian (defense agent) vs Saboteur (adversarial agent) — continuous self-auditing
+loop · defense-only simulation · synthetic UPI transaction stream</div>
+
+<div class="card" style="margin-bottom:16px">
+  <button id="runBtn" onclick="runSimulation()">▶ Run 10,000-Transaction Simulation</button>
+  <button class="pink" onclick="attackRound()">🥷 Manual Saboteur Attack Round</button>
+  <button class="gray" onclick="document.getElementById('log').innerHTML='';">Clear Log</button>
+</div>
+
+<div class="grid">
+  <div class="card"><h3>Transactions Processed</h3><div class="v blue" id="mTx">0</div></div>
+  <div class="card"><h3>Fraud Detection Rate</h3><div class="v green" id="mFDR">—</div></div>
+  <div class="card"><h3>False Positive Rate</h3><div class="v amber" id="mFPR">—</div></div>
+  <div class="card"><h3>Cost of False Positives</h3><div class="v red" id="mCFP">₹0</div>
+    <div class="sub">Lost revenue from declined legit orders</div></div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h3>Live Transaction Stream</h3>
+    <div id="log"></div>
+  </div>
+  <div>
+    <div class="card">
+      <h3>Guardian Weights (retrained live by loop)</h3>
+      <table>
+        <tr><th>Signal</th><th>Weight</th></tr>
+        <tbody id="wTable"></tbody>
+      </table>
+    </div>
+    <div class="loopbox">
+      <h3 style="font-size:11px;color:#f472b6;text-transform:uppercase;letter-spacing:1px">
+        ⚔️ Adversarial Self-Auditing Loop</h3>
+      <div class="sub" style="margin-top:6px" id="loopStats"></div>
+      <table>
+        <tr><th>Saboteur Vector</th><th>Bypass Rate (first → current)</th></tr>
+        <tbody id="vecTable"></tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h3>System Throughput</h3>
+      <div class="v green" id="mTPS">—</div>
+      <div class="sub">transactions/sec</div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ============ 1. UTILITIES ============ */
+function rnd(a, b) { return a + Math.random() * (b - a); }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function fmt(n) { return "₹" + Math.round(n).toLocaleString("en-IN"); }
+function cryptoTrace() {
+  const b = new Uint8Array(16);
+  crypto.getRandomValues(b);
+  return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("") + "…";
+}
+
+/* ============ 2. SYNTHETIC DATA GENERATOR ============ */
+const FRAUD_TYPES = [
+  { name: "Social engineering pump",        w: 0.30, amt: [800, 15000] },
+  { name: "Card / account takeover",        w: 0.25, amt: [500, 40000] },
+  { name: "Money mule transfer",            w: 0.20, amt: [42000, 49000] },
+  { name: "Kirana sent-not-received scam",  w: 0.15, amt: [300, 2500] },
+  { name: "Micro-payment probing",          w: 0.10, amt: [1, 50] }
+];
+const MERCHANTS = [
+  { name: "Kirana Pro Store",     avgSale: 450,  margin: 0.18 },
+  { name: "UrbanNest Electronics",avgSale: 8500, margin: 0.08 },
+  { name: "ChaiPoint Franchise",  avgSale: 180,  margin: 0.30 },
+  { name: "StyleBazaar Apparel",  avgSale: 2200, margin: 0.22 },
+  { name: "FreshKart Groceries",  avgSale: 700,  margin: 0.15 }
+];
+
+function weightedFraudType() {
+  let r = Math.random();
+  for (const t of FRAUD_TYPES) { r -= t.w; if (r <= 0) return t; }
+  return FRAUD_TYPES[0];
+}
+
+function genTx(i) {
+  const isFraud = Math.random() < 0.03;
+  const m = pick(MERCHANTS);
+  const tx = {
+    id: "TXN" + String(i).padStart(5, "0"),
+    traceId: cryptoTrace(),
+    isFraud: isFraud,
+    fraudType: null,
+    merchant: m,
+    amount: 0,
+    channel: pick(["UPI-app", "web", "mobile-SDK"]),
+    deviceBattery: rnd(20, 100),
+    netSwitch: false,
+    typingSpeed: rnd(30, 90),        // keystrokes/min, legit baseline
+    sessionVelocity: 1,              // txns in last 10 min
+    geoKnown: true,
+    hour: Math.floor(rnd(0, 24))
+  };
+
+  if (isFraud) {
+    const ft = weightedFraudType();
+    tx.fraudType = ft.name;
+    tx.amount = Math.round(rnd(ft.amt[0], ft.amt[1]));
+    tx.typingSpeed = rnd(100, 220);                       // bot / coerced typing
+    if (ft.name === "Card / account takeover") { tx.geoKnown = false; tx.netSwitch = true; }
+    if (ft.name === "Money mule transfer") tx.sessionVelocity = Math.floor(rnd(4, 12));
+    if (ft.name === "Micro-payment probing") tx.sessionVelocity = Math.floor(rnd(6, 15));
+    if (Math.random() < 0.35) tx.netSwitch = true;
+    if (Math.random() < 0.20) tx.deviceBattery = rnd(1, 10);
+    if (Math.random() < 0.30) tx.hour = pick([1, 2, 3, 4, 23]);
+  } else {
+    tx.amount = Math.max(20, Math.round(tx.merchant.avgSale * Math.exp(rnd(-0.8, 1.1))));
+    if (Math.random() < 0.05) tx.geoKnown = false;        // travelling user
+    if (Math.random() < 0.05) tx.sessionVelocity = Math.floor(rnd(3, 6)); // shopping spree
+  }
+  return tx;
+}
+
+/* ============ 3. GUARDIAN — the defense agent ============ */
+const guardian = {
+  weights: {
+    typingAnomaly:   2.2,
+    geoUnknown:      1.6,
+    sessionVelocity: 1.8,
+    netSwitch:       1.0,
+    lowBattery:      0.5,
+    oddHour:         0.6,
+    amtDeviation:    1.4,
+    muleThreshold:   1.7
+  },
+  DECISION_THRESHOLD: 3.5,
+  patched: 0
+};
+
+function guardianScore(tx) {
+  const signals = {
+    typingAnomaly:   tx.typingSpeed > 95 ? Math.min(1, (tx.typingSpeed - 95) / 120) : 0,
+    geoUnknown:      tx.geoKnown ? 0 : 1,
+    sessionVelocity: Math.min(1, (tx.sessionVelocity - 1) / 9),
+    netSwitch:       tx.netSwitch ? 1 : 0,
+    lowBattery:      tx.deviceBattery < 10 ? 1 : 0,
+    oddHour:         (tx.hour <= 4) ? 1 : 0,
+    amtDeviation:    Math.min(1, Math.abs(tx.amount - tx.merchant.avgSale) / (tx.merchant.avgSale * 4)),
+    muleThreshold:   (tx.amount > 42000 && tx.amount < 50000) ? 1 : 0
+  };
+
+  let risk = 0;
+  const drivers = [];
+  for (const k in signals) {
+    const contrib = signals[k] * guardian.weights[k];
+    risk += contrib;
+    if (signals[k] > 0) drivers.push({ sig: k, contrib: contrib });
+  }
+  risk = Math.min(10, risk);
+  drivers.sort((a, b) => b.contrib - a.contrib);
+  return { risk: risk, drivers: drivers };
+}
+
+/* ============ 4. COUNTERFACTUAL EXPLANATION ENGINE ============ */
+const CF_TEXT = {
+  typingAnomaly:   s => "If typing cadence matched the user's biometric baseline (~48 kpm), risk would fall to ~" + Math.max(0.5, s.risk - 2.2).toFixed(1) + "/10.",
+  geoUnknown:      s => "If geolocation were re-verified via a separate channel (e.g., SMS OTP at checkout), risk would drop to ~" + Math.max(0.5, s.risk - 1.6).toFixed(1) + "/10.",
+  sessionVelocity: s => "If transaction velocity were spread over 30 min instead of 10, risk would drop to ~" + Math.max(0.5, s.risk - 1.8).toFixed(1) + "/10.",
+  muleThreshold:   s => "If the amount were split into 2 verified installments, risk would drop to ~" + Math.max(0.5, s.risk - 1.7).toFixed(1) + "/10.",
+  amtDeviation:    s => "If the amount matched this merchant's typical basket, risk would drop to ~" + Math.max(0.5, s.risk - 1.4).toFixed(1) + "/10.",
+  netSwitch:       s => "If the connection had stayed on the original Wi-Fi network, risk would drop to ~" + Math.max(0.5, s.risk - 1.0).toFixed(1) + "/10.",
+  lowBattery:      s => "Device telemetry anomaly alone is a weak signal — an app-uptime check would lower risk to ~" + Math.max(0.5, s.risk - 0.5).toFixed(1) + "/10.",
+  oddHour:         s => "If scheduled during the user's active hours, risk would drop to ~" + Math.max(0.5, s.risk - 0.6).toFixed(1) + "/10."
+};
+
+function counterfactual(score) {
+  const top = score.drivers[0];
+  if (!top || !CF_TEXT[top.sig]) return "Borderline score — recommend manual review via support channel.";
+  return CF_TEXT[top.sig](score);
+}
+
+/* ============ 5. SABOTEUR — the adversarial agent ============ */
+const saboteurVectors = [
+  { name: "Slow-typing bot (biometric mimic)", target: "typingAnomaly",
+    craft: t => { t.typingSpeed = rnd(40, 80); return t; } },
+  { name: "Known-geo account takeover",        target: "geoUnknown",
+    craft: t => { t.geoKnown = true; return t; } },
+  { name: "Velocity-spread mule structuring",  target: "sessionVelocity", 
+    craft: t => { t.sessionVelocity = 1; t.amount = Math.round(rnd(44000, 49500)); return t; } },
+  { name: "Merchant-basket-sized fraud",       target: "amtDeviation",
+    craft: t => { t.amount = Math.round(t.merchant.avgSale * rnd(0.9, 1.1)); return t; } },
+  { name: "Stable-network coerced payment",    target: "netSwitch",
+    craft: t => { t.netSwitch = false; return t; } }
+];
+
+const saboteurStats = saboteurVectors.map(v => ({
+  name: v.name, attacks: 0, bypasses: 0, baseline: null
+}));
+
+function patchGuardian(signal) {
+  guardian.weights[signal] = Math.min(4.0, guardian.weights[signal] * 1.15);
+  guardian.weights.netSwitch = Math.min(2.5, guardian.weights.netSwitch * 1.02);
+  guardian.patched++;
+}
+
+function saboteurAttack(n) {
+  let bypasses = 0;
+  for (let i = 0; i < n; i++) {
+    const vi = Math.floor(Math.random() * saboteurVectors.length);
+    const vec = saboteurVectors[vi];
+    const st = saboteurStats[vi];
+    st.attacks++;
+    let tx = genTx(99999);
+    tx.isFraud = true;
+    tx.fraudType = "SABOTEUR: " + vec.name;
+    tx = vec.craft(tx);
+    const sc = guardianScore(tx);
+    if (sc.risk < guardian.DECISION_THRESHOLD) {
+      st.bypasses++;
+      bypasses++;
+      patchGuardian(vec.target);   // feedback loop: harden the exploited signal
+    }
+  }
+  return bypasses;
+}
+
+/* ============ 6. SIMULATION RUNNER + UI ============ */
+const metrics = { tx:0, fraudTotal:0, fraudCaught:0, legitTotal:0, falsePos:0, fpCost:0, start:0 };
+const EL = id => document.getElementById(id);
+
+function logTx(tx, sc, verdict) {
+  const log = EL("log");
+  const cls = { "CAUGHT":"tFRAUD", "FALSE-POSITIVE":"tFALSEPOS",
+                "MISSED":"tMISS", "APPROVED":"tLEGIT" }[verdict] || "tLEGIT";
+  let html = '<div class="tx">'
+    + '<span class="tag ' + cls + '">' + verdict + '</span> '
+    + '<b>' + tx.id + '</b> · ' + fmt(tx.amount) + ' @ ' + tx.merchant.name
+    + ' · risk <b style="color:' + (sc.risk > guardian.DECISION_THRESHOLD ? '#f87171' : '#4ade80') + '">'
+    + sc.risk.toFixed(1) + '/10</b>'
+    + ' <span style="color:#475569">· trace ' + tx.traceId + '</span>';
+
+  if (verdict === "FALSE-POSITIVE") {
+    const cost = tx.amount * tx.merchant.margin * 2.4;   // lost margin × revenue multiplier
+    metrics.fpCost += cost;
+    html += '<div class="cf">⚠️ <b>Counterfactual:</b> ' + counterfactual(sc)
+         + '<br>→ <b>Cost of False Positive: ' + fmt(cost) + '</b> (lost margin × historical sales multiplier)</div>';
+  }
+  if (verdict === "MISSED") {
+    html += '<div class="cf">🕳️ Fraud missed — pattern: ' + tx.fraudType + '. Flagged for next training cycle.</div>';
+  }
+  html += '</div>';
+  log.insertAdjacentHTML("afterbegin", html);
+  while (log.childElementCount > 60) log.removeChild(log.lastElementChild);
+}
+
+function logSys(msg) {
+  EL("log").insertAdjacentHTML("afterbegin",
+    '<div class="tx"><span class="tag tSYS">[GRID]</span> ' + msg + '</div>');
+}
+
+function refresh() {
+  EL("mTx").textContent  = metrics.tx.toLocaleString();
+  EL("mFDR").textContent = metrics.fraudTotal ? (100 * metrics.fraudCaught / metrics.fraudTotal).toFixed(1) + "%" : "—";
+  EL("mFPR").textContent = metrics.legitTotal ? (100 * metrics.falsePos / metrics.legitTotal).toFixed(2) + "%" : "—";
+  EL("mCFP").textContent = fmt(metrics.fpCost);
+  const secs = (Date.now() - metrics.start) / 1000;
+  EL("mTPS").textContent = metrics.start && secs > 0 ? Math.round(metrics.tx / secs) : "—";
+
+  let rows = "";
+  for (const k in guardian.weights) {
+    const w = guardian.weights[k];
+    rows += '<tr><td>' + k + '</td><td style="width:55%">'
+         + '<div class="bar"><div style="width:' + (w / 4 * 100) + '%"></div></div>'
+         + w.toFixed(2) + '</td></tr>';
+  }
+  EL("wTable").innerHTML = rows;
+
+  let atk = 0, byp = 0;
+  saboteurStats.forEach(s => { atk += s.attacks; byp += s.bypasses; });
+  EL("loopStats").textContent = "Saboteur attacks: " + atk
+    + " · Bypasses found: " + byp + " · Guardian patches applied: " + guardian.patched;
+
+  EL("vecTable").innerHTML = saboteurStats.map(s => {
+    const cur = s.attacks ? s.bypasses / s.attacks : 0;
+    if (s.baseline === null) s.baseline = cur;
+    return '<tr><td>' + s.name + '</td><td>'
+      + (100 * s.baseline).toFixed(0) + '% → <b style="color:#4ade80">'
+      + (100 * cur).toFixed(0) + '%</b></td></tr>';
+  }).join("");
+}
+
+async function runSimulation() {
+  EL("runBtn").disabled = true;
+  metrics.tx = 0; metrics.fraudTotal = 0; metrics.fraudCaught = 0;
+  metrics.legitTotal = 0; metrics.falsePos = 0; metrics.fpCost = 0;
+  metrics.start = Date.now();
+
+  const TOTAL = 10000, BATCH = 500;
+
+  for (let i = 0; i < TOTAL; i++) {
+    const tx = genTx(i);
+    const sc = guardianScore(tx);
+    metrics.tx++;
+
+    let verdict;
+    if (sc.risk >= guardian.DECISION_THRESHOLD) {
+      if (tx.isFraud) { verdict = "CAUGHT"; metrics.fraudTotal++; metrics.fraudCaught++; }
+      else { verdict = "FALSE-POSITIVE"; metrics.legitTotal++; metrics.falsePos++; }
+    } else {
+      if (tx.isFraud) { verdict = "MISSED"; metrics.fraudTotal++; }
+      else { verdict = "APPROVED"; metrics.legitTotal++; }
+    }
+
+    if (verdict !== "APPROVED" || i % 97 === 0) logTx(tx, sc, verdict);
+
+    if (i % BATCH === 0 && i > 0) {
+      saboteurAttack(50);   // adversarial self-auditing loop fires every batch
+      refresh();
+      await new Promise(r => setTimeout(r, 10));
+    }
+  }
+
+  const bp = saboteurAttack(300);
+  refresh();
+  EL("runBtn").disabled = false;
+  logSys("✅ Simulation complete: 10,000 txs · FDR "
+    + (100 * metrics.fraudCaught / metrics.fraudTotal).toFixed(1) + "% · FPR "
+    + (100 * metrics.falsePos / metrics.legitTotal).toFixed(2) + "% · Cost of FP "
+    + fmt(metrics.fpCost) + " · Final Saboteur round bypasses: " + bp + " (Guardian hardened live)");
+}
+
+function attackRound() {
+  const bp = saboteurAttack(200);
+  logSys("🥷 Manual Saboteur round: 200 attacks, " + bp
+    + " bypasses → " + guardian.patched + " total patches applied to Guardian.");
+  refresh();
+}
+
+/* ============ BOOT ============ */
+refresh();
+logSys("Grid online. Guardian v1 loaded (static historical training). Run the simulation to start the adversarial loop.");
+</script>
+</body>
+</html>
