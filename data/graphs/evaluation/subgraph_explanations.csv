@@ -1,0 +1,2 @@
+account_index,account_id,baseline_risk_score,neighbor_rank,neighbor_index,neighbor_id,score_after_removal,score_change,absolute_impact,transaction_count
+100,10_800059840,0.5106827485561372,1,5688,1467_800D10B40,0.5649873849749566,-0.05430463641881944,0.05430463641881944,1
