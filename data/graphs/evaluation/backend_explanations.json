@@ -1,0 +1,76 @@
+{
+  "10_800059840": {
+    "account_id": "10_800059840",
+    "account_index": 100,
+    "risk_score": 0.5106827485561372,
+    "risk_level": "MEDIUM",
+    "model_weights": {
+      "graphsage": 0.78,
+      "gatv2": 0.19,
+      "gin": 0.03
+    },
+    "feature_reasons": [
+      {
+        "feature": "log1p_receiving_currency_diversity",
+        "display_name": "Receiving currency diversity",
+        "original_value": 3.4456069469451904,
+        "perturbed_score": 0.08031164176762104,
+        "impact": 0.4303711067885161,
+        "direction": "positive"
+      },
+      {
+        "feature": "log1p_incoming_payment_format_diversity",
+        "display_name": "Incoming payment format diversity",
+        "original_value": 2.909538745880127,
+        "perturbed_score": 0.7701207989454268,
+        "impact": -0.2594380503892897,
+        "direction": "negative"
+      },
+      {
+        "feature": "incoming_log_amount_mean",
+        "display_name": "Incoming log amount mean",
+        "original_value": 3.1528849601745605,
+        "perturbed_score": 0.2905718244612217,
+        "impact": 0.22011092409491545,
+        "direction": "positive"
+      },
+      {
+        "feature": "log1p_out_transaction_count",
+        "display_name": "Out transaction count",
+        "original_value": -1.5276957750320435,
+        "perturbed_score": 0.688044275343418,
+        "impact": -0.1773615267872809,
+        "direction": "negative"
+      },
+      {
+        "feature": "log1p_unique_receiver_banks",
+        "display_name": "Unique receiver banks",
+        "original_value": 0.904313325881958,
+        "perturbed_score": 0.6789743840694428,
+        "impact": -0.16829163551330562,
+        "direction": "negative"
+      }
+    ],
+    "graph_reasons": [
+      {
+        "neighbor_id": "1467_800D10B40",
+        "neighbor_index": 5688,
+        "impact": -0.05430463641881944,
+        "absolute_impact": 0.05430463641881944,
+        "score_after_removal": 0.5649873849749566,
+        "transaction_count": 1
+      }
+    ],
+    "transactions": [
+      {
+        "neighbor_id": "1467_800D10B40",
+        "edge_index": 1870666,
+        "amount_paid": 34.97999954223633,
+        "amount_received": 34.97999954223633,
+        "edge_label": 0.0,
+        "timestamp": 1662164
+      }
+    ],
+    "interpretation_note": "Impacts represent changes in the trained model's prediction after feature or neighbor perturbation. They do not establish real-world causation or illicit activity."
+  }
+}
