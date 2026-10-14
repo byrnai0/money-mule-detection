@@ -189,7 +189,7 @@ def main():
     start = time.perf_counter()
 
     print("=" * 75)
-    print("PHASE 7F-2 — TEMPORAL GRAPHSAGE")
+    print("Phase 7.6.1 - Temporal GraphSAGE")
     print("=" * 75)
 
     print(

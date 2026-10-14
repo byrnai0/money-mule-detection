@@ -461,7 +461,7 @@ def main():
     )
 
     print("\n" + "=" * 75)
-    print("PHASE 7G COMPLETE")
+    print("PHASE 7 COMPLETE")
     print("=" * 75)
 
     print(
