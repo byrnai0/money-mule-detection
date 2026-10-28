@@ -55,15 +55,16 @@ Financial Transaction Data (Elliptic / IBM AML)
 money-mule-detection/
 ├── data/
 │   ├── raw/
-│   │   └── HI-Small_Trans.csv                    # Elliptic + IBM AML raw datasets (not committed)
+│   │   └── HI-Small_Trans.csv                         # Raw IBM AML dataset (not committed)
 │   ├── processed/
-│   │   ├── HI-Small_Trans_clean.csv
-│   │   ├── account_labels.csv
-│   │   ├── account_features_v2.csv
-│   │   ├── account_features_v3.csv
-│   │   ├── account_features_final.csv
-│   │   ├── feature_profile_v2.csv
-│   │   └── feature_profile_v3.csv
+│   │   ├── HI-Small_Trans_clean.csv                   # Expected cleaned data; confirm current filename
+│   │   ├── account_labels.csv                         # Expected labels; confirm current filename
+│   │   ├── account_features_v2.csv                     # If retained
+│   │   ├── account_features_v3.csv                     # If retained
+│   │   ├── account_features_final.csv                 # If retained
+│   │   ├── feature_profile_v2.csv                      # If retained
+│   │   ├── feature_profile_v3.csv                      # If retained
+│   │   └── feature_manifest.csv                        # Used by individual_explanation.py
 │   └── graphs/
 │       ├── ibm_aml_graph.pt
 │       ├── training_graph.pt
