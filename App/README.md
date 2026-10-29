@@ -1,4 +1,4 @@
-# AML Sentinel App
+# AML  App
 
 This folder contains the React dashboard and FastAPI backend for the money-mule detection project. The active frontend is `Frontend/src/AmlDashboard_v2.jsx`; the live sample action communicates with the backend route documented below.
 
