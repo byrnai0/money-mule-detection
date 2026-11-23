@@ -1,0 +1,112 @@
+/*
+ * AML Sentinel design system — iOS-inspired dark graphite, one blue accent.
+ * Keep the palette monochrome; use --primary as the only accent color.
+ */
+
+:root {
+	--radius: 0.875rem;
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, "SF Pro Text", "Figtree", ui-sans-serif, system-ui, sans-serif;
+	--font-display:
+		-apple-system, BlinkMacSystemFont, "SF Pro Display", "Figtree", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+
+	--background: oklch(0.13 0.004 260);
+	--foreground: oklch(0.97 0.002 260);
+	--surface: oklch(0.195 0.005 260);
+	--surface-raised: oklch(0.26 0.006 260);
+	--subtle: oklch(0.42 0.008 260);
+	--card: oklch(0.195 0.005 260);
+	--card-foreground: oklch(0.97 0.002 260);
+	--popover: oklch(0.22 0.005 260);
+	--popover-foreground: oklch(0.97 0.002 260);
+
+	--primary: oklch(0.66 0.17 250);
+	--primary-foreground: oklch(0.99 0 0);
+	--secondary: oklch(0.26 0.006 260);
+	--secondary-foreground: oklch(0.97 0.002 260);
+	--muted: oklch(0.26 0.006 260);
+	--muted-foreground: oklch(0.68 0.01 260);
+	--accent: oklch(0.66 0.17 250 / 14%);
+	--accent-foreground: oklch(0.8 0.11 250);
+	--destructive: oklch(0.66 0.2 25);
+	--destructive-foreground: oklch(0.99 0 0);
+	--border: oklch(1 0 0 / 8%);
+	--input: oklch(1 0 0 / 12%);
+	--ring: oklch(0.66 0.17 250);
+
+	--shadow-soft: 0 1px 0 oklch(1 0 0 / 5%) inset, 0 12px 32px -16px oklch(0 0 0 / 70%);
+	--shadow-pill: 0 1px 2px oklch(0 0 0 / 40%), 0 0 0 0.5px oklch(1 0 0 / 8%);
+
+	--chart-1: oklch(0.66 0.17 250);
+	--chart-2: oklch(0.66 0.17 250 / 60%);
+	--chart-3: oklch(0.66 0.17 250 / 30%);
+	--chart-4: oklch(0.68 0.01 260);
+	--chart-5: oklch(0.42 0.008 260);
+	--sidebar: oklch(0.16 0.004 260);
+	--sidebar-foreground: oklch(0.97 0.002 260);
+	--sidebar-primary: oklch(0.66 0.17 250);
+	--sidebar-primary-foreground: oklch(0.99 0 0);
+	--sidebar-accent: oklch(0.26 0.006 260);
+	--sidebar-accent-foreground: oklch(0.97 0.002 260);
+	--sidebar-border: oklch(1 0 0 / 8%);
+	--sidebar-ring: oklch(0.66 0.17 250);
+}
+
+*,
+::before,
+::after {
+	border-color: var(--border);
+}
+
+html {
+	color-scheme: dark;
+}
+
+body {
+	background-color: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	font-feature-settings: "tnum" 1;
+}
+
+.card-ios {
+	background-color: var(--surface);
+	border-radius: 1.375rem;
+	box-shadow: var(--shadow-soft);
+}
+
+.glass {
+	background-color: color-mix(in oklab, var(--background) 72%, transparent);
+	backdrop-filter: saturate(180%) blur(20px);
+	-webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+.shadow-pill {
+	box-shadow: var(--shadow-pill);
+}
+
+.scrollbar-none {
+	scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+	display: none;
+}
+
+@keyframes rise-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px) scale(0.995);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.animate-rise {
+	animation: rise-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
